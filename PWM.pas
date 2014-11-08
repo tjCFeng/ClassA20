@@ -91,7 +91,7 @@ begin
   FPWM_PERIOD[0]:= Pointer(Base + $204);
   FPWM_PERIOD[1]:= Pointer(Base + $208);
 
-  FPWM_CTRL^:= FPWM_CTRL^ or (($1 shl 24) + ($1 shl 9));
+  //FPWM_CTRL^:= FPWM_CTRL^ or (($1 shl 24) + ($1 shl 9));
 end;
 
 destructor TPWMGROUP.Destroy;
