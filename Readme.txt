@@ -1,18 +1,18 @@
-ȫ־A20�������ײ������һЩ��װ������free pascal����װ�ࡣ
-ʹ�÷������ڹ��������Ӹ������ڵ��ļ���·�����ɡ�
+全志A20处理器底层操作的一些封装，采用free pascal封装类。
+使用方法：在工程中添加该类所在的文件夹路径即可。
 
-һ��ÿһ�����蹦�ܷ�Ϊ�����ַ�װ��һ����ֱ�Ӷ�ĳһPin��ͨ���Ĳ����࣬ʵ�ֶԳ��ù��ܵķ�װ����һ���ǶԸ���������ļĴ��������࣬������ǰ��û�з�װ���Ĺ��ܽ������á�
+一般每一个外设功能分为两部分封装，一种是直接对某一Pin或通道的操作类，实现对常用功能的封装；另一种是对该类型外设的寄存器操作类，用来对前者没有封装到的功能进行设置。
 
-Ŀǰʵ���˶�GPIO��LRADC��PWM�ķ�װ����������½����ɣ��������ڳ������Ӷ��жϵ���Ӧ���ܡ�
+目前实现了对GPIO、LRADC、PWM的封装，后续功能陆续完成，并且正在尝试增加对中断的响应功能。
 
-��������ڿ���̨���н�����޽�������о��ɣ����Ҹ��ݱ������Ĳ�ͬ��Ҳ�����ڲ�ͬ�Ĳ���ϵͳ��ֻ����ٵĴ���Ķ��������ò�ͬ�ĵ�Ԫ�ȡ�
+该类可用在控制台、有界面或无界面程序中均可，并且根据编译器的不同，也可用在不同的操作系统，只需很少的代码改动，如引用不同的单元等。
 
-ȫ־����ϵ�еĴ�����Ҳ��ʹ�ø��࣬��A10�ȣ�ֻ��Ҫ���ݲ���Ĳ��ֽ��иĶ������߼̳�����ʵ�֡�
+全志其他系列的处理器也可使用该类，如A10等，只需要根据差异的部分进行改动，或者继承重新实现。
 
-���ߣ�tjCFeng
-���䣺tjCFeng@163.com
+作者：tjCFeng
+邮箱：tjCFeng@163.com
 
-���ӣ�
+例子：
 1.TGPIOGROUP
 
 [code]
@@ -20,9 +20,9 @@ uses GPIO;
 
 var PHG: TGPIOGROUP;
 begin
-  PHG:= TGPIOGROUP.Create(PH); //����
-  PHG.GPIO_DAT^:= PHG.GPIO_DAT^ or ($1 shl 24); //���üĴ�����ֵ
-  PHG.Free; //�ͷ�
+  PHG:= TGPIOGROUP.Create(PH); //创建
+  PHG.GPIO_DAT^:= PHG.GPIO_DAT^ or ($1 shl 24); //设置寄存器的值
+  PHG.Free; //释放
 end;
 [/code]
 
@@ -34,16 +34,16 @@ uses GPIO;
 begin
   with TGPIO.Create(PH, 24) do
   begin
-    Fun:= Fun1; //����PH24Ϊ���
-    Data:= True; //���øߵ�ƽ
+    Fun:= Fun1; //设置PH24为输出
+    Data:= True; //设置高电平
     Sleep(1000);
-    Reverse; //��ת��ƽ
-    Free; //�ͷ�
+    Reverse; //反转电平
+    Free; //释放
   end;
 end;
 [/code]
 
-��
+或
 
 [code]
 var PH24: TGPIO;
@@ -62,13 +62,13 @@ uses LRADC;
 
 var ADC0: TLRADC; Data: Byte;
 begin
-  ADC0:= TLRADC.Create(LRADC_0); //����LRADCͨ��0
-  TLRADCGROUP.Instance.ClearAllPending; //�������δ���жϣ������еĹ���
-  ADC0.INTs:= [ADCDATA, KEYDOWN, KEYUP]; //������Ҫ��Ӧ���ж�����
-  TLRADCGROUP.Instance.Start; //����LRADC�������еĹ���
-  Data:= ADC0.Data; //��ȡLRADCͨ��0��ֵ0~64
-  TLRADCGROUP.Instance.Stop; //ֹͣLRADC�������еĹ���
-  ADC0.Free; //�ͷ�
+  ADC0:= TLRADC.Create(LRADC_0); //创建LRADC通道0
+  TLRADCGROUP.Instance.ClearAllPending; //清除所有未决中断，单例中的功能
+  ADC0.INTs:= [ADCDATA, KEYDOWN, KEYUP]; //设置需要响应的中断类型
+  TLRADCGROUP.Instance.Start; //开启LRADC，单例中的功能
+  Data:= ADC0.Data; //获取LRADC通道0的值0~64
+  TLRADCGROUP.Instance.Stop; //停止LRADC，单例中的功能
+  ADC0.Free; //释放
 end;
 [/code]
 
@@ -79,16 +79,16 @@ uses PWM;
 
 var PWM1: TPWM;
 begin
-  PWM1:= TPWM.Create(PWM_1); //����PWMͨ��1
+  PWM1:= TPWM.Create(PWM_1); //创建PWM通道1
   with PWM1 do
   begin
-    Prescale:= P960; //����Ԥ��Ƶ
-    Cycle:= 6000; //�������ڼ���
-    Duty:= 1000;  //����ռ�ձȼ���
-    Start; //��ʼPWM���
+    Prescale:= P960; //设置预分频
+    Cycle:= 6000; //设置周期计数
+    Duty:= 1000;  //设置占空比计数
+    Start; //开始PWM输出
     Sleep(3000);
-    Stop; //ֹͣPWM���
-    Free; //�ͷ�
+    Stop; //停止PWM输出
+    Free; //释放
   end;
 end;
 [/code]
@@ -108,7 +108,7 @@ begin
     CUR:= 0;
     Start;
     while not Timer0.INT do ;
-    //ִ�е�������1��
+    //执行到这里是1秒
     Stop;
     Free;
   end;
@@ -166,9 +166,9 @@ begin
 end;
 [/code]
 
-��ʷ�汾��
-2014.10.18 v0.5 ����TWI��װ�࣬��������bug
-2014.10.16 v0.3 ����General Purpose��װ��
-2014.10.15 v0.3 ����RTC��װ�࣬�������ֱ���λ�����bug
-2014.10.14 v0.2 ����Timer��װ��
-2014.10.03 v0.1 ���GPIO��LRADC��PWM�ķ�װ��
+历史版本：
+2014.10.18 v0.5 增加TWI封装类，修正部分bug
+2014.10.16 v0.3 增加General Purpose封装类
+2014.10.15 v0.3 增加RTC封装类，修正部分变量位定义的bug
+2014.10.14 v0.2 增加Timer封装类
+2014.10.03 v0.1 完成GPIO、LRADC、PWM的封装类
