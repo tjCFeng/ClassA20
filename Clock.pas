@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 (*
 说明：全志A20的System Clock底层操作封装类。单例。
 作者：tjCFeng
