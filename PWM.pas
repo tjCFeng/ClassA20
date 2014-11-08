@@ -155,7 +155,7 @@ end;
 procedure TPWM.Stop;
 begin
   with TPWMGROUP.Instance do
-  FPWM_CTRL^:= FPWM_CTRL^ and ($1 shl (Ord(FChannel) * 15 + 4));
+  FPWM_CTRL^:= FPWM_CTRL^ and not ($1 shl (Ord(FChannel) * 15 + 4));
 end;
 
 finalization
