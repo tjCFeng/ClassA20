@@ -40,14 +40,14 @@ type
 
     procedure SetDT(Value: TYMDHNSW);
     function GetDT: TYMDHNSW;
+
+    constructor Create;
+    destructor Destroy; override;
   protected
     FLOSC_CTRL: ^LongWord;
     FRTC_DATE: ^LongWord;
     FRTC_TIME: ^LongWord;
     //Alarm Reg ...
-  public
-    constructor Create;
-    destructor Destroy; override;
   public
     property DateTime: TYMDHNSW read GetDT write SetDT;
   end;
