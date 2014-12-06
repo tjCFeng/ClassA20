@@ -4,7 +4,7 @@
 2.TPWM类，对具体的PWM通道实现了一些功能的简化。
 作者：tjCFeng
 邮箱：tjCFeng@163.com
-更新日期：2014.10.10
+更新日期：2014.12.06
 *)
 
 unit PWM;
@@ -13,7 +13,7 @@ unit PWM;
 
 interface
 
-uses Unix, BaseUnix, SysUtils, A20, GPIO;
+uses SysUtils, A20, GPIO;
 
 type
   TChannel = (PWM_0, PWM_1);
@@ -31,14 +31,14 @@ type
 
   private
     FPWM_BASE: ^LongWord;
-    FPWM_CTRL: TGOURP1_REG;
-    FPWM_PERIOD: TGOURP2_REG;
+    FPWM_CTRL: TGROUP1_REG;
+    FPWM_PERIOD: TGROUP2_REG;
 
     constructor Create;
     destructor Destroy; override;
   public
-    property PWM_CTRL: TGOURP1_REG read FPWM_CTRL;
-    property PWM_PERIOD: TGOURP2_REG read FPWM_PERIOD;
+    property PWM_CTRL: TGROUP1_REG read FPWM_CTRL;
+    property PWM_PERIOD: TGROUP2_REG read FPWM_PERIOD;
   end;
 
   TPWM = class(TGPIO)
@@ -91,7 +91,7 @@ begin
   FPWM_PERIOD[0]:= Pointer(Base + $204);
   FPWM_PERIOD[1]:= Pointer(Base + $208);
 
-  //FPWM_CTRL^:= FPWM_CTRL^ or (($1 shl 24) + ($1 shl 9));
+  //FPWM_CTRL^:= FPWM_CTRL^ or (($1 shl 24) + ($1 shl 9)); //OSC24MHz
 end;
 
 destructor TPWMGROUP.Destroy;
@@ -158,8 +158,8 @@ begin
   FPWM_CTRL^:= FPWM_CTRL^ and not ($1 shl (Ord(FChannel) * 15 + 4));
 end;
 
+
 finalization
   TPWMGROUP.Instance.Release;
 
 end.
-
