@@ -2,7 +2,7 @@
 说明：全志A20的TWI底层操作封装类。
 作者：tjCFeng
 邮箱：tjCFeng@163.com
-更新日期：2014.10.17
+更新日期：2014.12.06
 *)
 
 unit TWI;
@@ -11,7 +11,7 @@ unit TWI;
 
 interface
 
-uses Unix, BaseUnix, SysUtils, A20, Clock, GPIO;
+uses SysUtils, A20, Clock, GPIO;
 
 type
   TChannel = (TWI_0, TWI_1, TWI_2, TWI_3, TWI_4);
@@ -352,4 +352,3 @@ begin
 end;
 
 end.
-
