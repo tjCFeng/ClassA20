@@ -4,7 +4,7 @@
 2.TLRADC类，对具体的LRADC通道实现了一些功能的简化。
 作者：tjCFeng
 邮箱：tjCFeng@163.com
-更新日期：2014.10.10
+更新日期：2014.12.06
 *)
 
 unit LRADC;
@@ -13,7 +13,7 @@ unit LRADC;
 
 interface
 
-uses Unix, BaseUnix, SysUtils, A20;
+uses SysUtils, A20;
 
 type
   TChannel = (LRADC_0, LRADC_1);
@@ -30,10 +30,10 @@ type
 
   private
     FLRADC_BASE: ^LongWord;
-    FLRADC_CTRL: TGOURP1_REG;
-    FLRADC_INTC: TGOURP1_REG;
-    FLRADC_INTS: TGOURP1_REG;
-    FLRADC_DATA: TGOURP2_REG;
+    FLRADC_CTRL: TGROUP1_REG;
+    FLRADC_INTC: TGROUP1_REG;
+    FLRADC_INTS: TGROUP1_REG;
+    FLRADC_DATA: TGROUP2_REG;
 
     constructor Create;
     destructor Destroy; override;
@@ -42,10 +42,10 @@ type
     procedure Stop;
     procedure ClearAllPending;
   public
-    property LRADC_CTRL: TGOURP1_REG read FLRADC_CTRL;
-    property LRADC_INTC: TGOURP1_REG read FLRADC_INTC;
-    property LRADC_INTS: TGOURP1_REG read FLRADC_INTS;
-    property LRADC_DATA: TGOURP2_REG read FLRADC_DATA;
+    property LRADC_CTRL: TGROUP1_REG read FLRADC_CTRL;
+    property LRADC_INTC: TGROUP1_REG read FLRADC_INTC;
+    property LRADC_INTS: TGROUP1_REG read FLRADC_INTS;
+    property LRADC_DATA: TGROUP2_REG read FLRADC_DATA;
   end;
 
   TLRADC = class
@@ -175,8 +175,8 @@ begin
   if (KEYUP in INTs) then ClearPending(Ord(KEYUP));
 end;
 
+
 finalization
   TLRADCGROUP.Instance.Release;
 
 end.
-
