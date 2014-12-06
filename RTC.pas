@@ -3,7 +3,7 @@
 TRTC类，可对寄存器直接操作，并实现了一些功能的简化。
 作者：tjCFeng
 邮箱：tjCFeng@163.com
-更新日期：2014.10.15
+更新日期：2014.12.06
 *)
 
 unit RTC;
@@ -12,7 +12,7 @@ unit RTC;
 
 interface
 
-uses Unix, BaseUnix, SysUtils, A20;
+uses SysUtils, A20;
 
 type
   TWeek = (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday);
@@ -40,8 +40,8 @@ type
 
     procedure SetDT(Value: TYMDHNSW);
     function GetDT: TYMDHNSW;
-
-    constructor Create;
+	
+	constructor Create;
     destructor Destroy; override;
   protected
     FLOSC_CTRL: ^LongWord;
@@ -149,6 +149,7 @@ begin
     end;
   end;
 end;
+
 
 finalization
   TRTC.Instance.Release;
