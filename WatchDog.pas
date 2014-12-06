@@ -2,7 +2,7 @@
 说明：全志A20的WatchDog底层操作封装类。单例。
 作者：tjCFeng
 邮箱：tjCFeng@163.com
-更新日期：2014.11.13
+更新日期：2014.12.06
 *)
 
 unit WatchDog;
@@ -11,7 +11,7 @@ unit WatchDog;
 
 interface
 
-uses Unix, BaseUnix, SysUtils, A20, Clock;
+uses SysUtils, A20, Clock;
 
 type
   TInterval = (S0_5, S1, S2, S3, S4, S5, S6, S8, S10, S12, S14, S16);
@@ -36,8 +36,8 @@ type
     procedure SetForceRestart(Value: Boolean);
     function GetForceRestart: Boolean;
   protected
-    FWDOG_CTRL: TGOURP1_REG;
-    FWDOG_MODE: TGOURP1_REG;
+    FWDOG_CTRL: TGROUP1_REG;
+    FWDOG_MODE: TGROUP1_REG;
   public
     procedure Start;
     procedure Stop;
@@ -45,8 +45,8 @@ type
   public
     property Interval: TInterval read GetInterval write SetInterval;
     property ForceRestart: Boolean read GetForceRestart write SetForceRestart;
-    property WDOG_CTRL: TGOURP1_REG read FWDOG_CTRL;
-    property WDOG_MODE: TGOURP1_REG read FWDOG_MODE;
+    property WDOG_CTRL: TGROUP1_REG read FWDOG_CTRL;
+    property WDOG_MODE: TGROUP1_REG read FWDOG_MODE;
   end;
 
 implementation
@@ -137,6 +137,7 @@ procedure TWDOG.Reset;
 begin
   FWDOG_CTRL^:= 1;
 end;
+
 
 finalization
   TWDOG.Instance.Release;
