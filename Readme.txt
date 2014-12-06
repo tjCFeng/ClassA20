@@ -1,4 +1,4 @@
-全志A20处理器底层操作的一些封装，采用free pascal封装类。
+全志A20处理器底层操作的一些封装，采用free pascal，封装类。
 使用方法：在工程中添加该类所在的文件夹路径即可。
 
 一般每一个外设功能分为两部分封装，一种是直接对某一Pin或通道的操作类，实现对常用功能的封装；另一种是对该类型外设的寄存器操作类，用来对前者没有封装到的功能进行设置。
@@ -166,7 +166,32 @@ begin
 end;
 [/code]
 
+9.WatchDog
+[code]
+uses WatchDog;
+begin
+  TWDOG.Instance.Interval:= S16; //16秒间隔
+  TWDOG.Instance.ForceRestart:= True; //未喂狗重启
+  TWDOG.Instance.Start;
+  TWDOG.Instance.Reset; //喂狗
+  TWDOG.InstanceStop;
+end;
+[/code]
+
+10.Temperature
+[code]
+uses TP;
+
+var T: Double;
+begin
+  T:= TTemperature.Instance.Temperature;
+end;
+[/code]
+
 历史版本：
+2014.12.06 v0.8 增加Temperature封装类，修正所有的TGOURP类型为TGROUP，抱歉，手误拼写错误
+2014.10.21 v0.7 增加WatchDog封装类
+2014.10.20 v0.6 增加GP封装类
 2014.10.18 v0.5 增加TWI封装类，修正部分bug
 2014.10.16 v0.3 增加General Purpose封装类
 2014.10.15 v0.3 增加RTC封装类，修正部分变量位定义的bug
