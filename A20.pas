@@ -3,7 +3,7 @@
 单例，请勿在程序中使用。
 作者：tjCFeng
 邮箱：tjCFeng@163.com
-更新日期：2014.10.10
+更新日期：2014.12.06
 *)
 
 unit A20;
@@ -15,12 +15,12 @@ interface
 uses Unix, BaseUnix, SysUtils;
 
 type
-  TGOURP1_REG = ^LongWord;
-  TGOURP2_REG = array [0..1] of ^LongWord;
-  TGOURP4_REG = array [0..3] of ^LongWord;
-  TGOURP5_REG = array [0..4] of ^LongWord;
-  TGOURP6_REG = array [0..5] of ^LongWord;
-  TGOURP16_REG = array [0..15] of ^LongWord;
+  TGROUP1_REG = ^LongWord;
+  TGROUP2_REG = array [0..1] of ^LongWord;
+  TGROUP4_REG = array [0..3] of ^LongWord;
+  TGROUP5_REG = array [0..4] of ^LongWord;
+  TGROUP6_REG = array [0..5] of ^LongWord;
+  TGROUP16_REG = array [0..15] of ^LongWord;
 
 type
   TA20 = class
@@ -90,8 +90,8 @@ begin
   if (MMapAddr <> nil) then fpMUnmap(MMapAddr, PAGE_SIZE);
 end;
 
+
 finalization
   TA20.Instance.Release;
 
 end.
-
