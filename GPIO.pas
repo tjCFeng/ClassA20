@@ -4,7 +4,7 @@
 2.TGPIO类，对具体的Pin实现了一些功能的简化。
 作者：tjCFeng
 邮箱：tjCFeng@163.com
-更新日期：2014.10.10
+更新日期：2014.12.06
 *)
 
 unit GPIO;
@@ -13,11 +13,11 @@ unit GPIO;
 
 interface
 
-uses Unix, BaseUnix, A20, Clock;
+uses A20, Clock;
 
 type
   TPort = (PA, PB, PC, PD, PE, PF, PG, PH, PI); //PS:DRAM
-  TFun = (Fun0, Fun1, Fun2, Fun3, Fun4, Fun5, Fun6, Fun7, Fun8); //Fun0:Input; Fun1:Output
+  TFun = (Fun0, Fun1, Fun2, Fun3, Fun4, Fun5, Fun6, Fun7); //Fun0:Input; Fun1:Output
   TDrv = (Level0, Level1, Level2, Level3);
   TPull = (PULL_OFF, PULL_UP, PULL_DOWN);
 
@@ -26,18 +26,18 @@ type
     FPort: TPort;
     FGPIO_BASE: ^LongWord;
   protected
-    FGPIO_CFG: TGOURP4_REG;
-    FGPIO_DAT: TGOURP1_REG;
-    FGPIO_DRV: TGOURP2_REG;
-    FGPIO_PUL: TGOURP2_REG;
+    FGPIO_CFG: TGROUP4_REG;
+    FGPIO_DAT: TGROUP1_REG;
+    FGPIO_DRV: TGROUP2_REG;
+    FGPIO_PUL: TGROUP2_REG;
   public
     constructor Create(Port: TPort);
     destructor Destroy; override;
   public
-    property GPIO_CFG: TGOURP4_REG read FGPIO_CFG;
-    property GPIO_DAT: TGOURP1_REG read FGPIO_DAT;
-    property GPIO_DRV: TGOURP2_REG read FGPIO_DRV;
-    property GPIO_PUL: TGOURP2_REG read FGPIO_PUL;
+    property GPIO_CFG: TGROUP4_REG read FGPIO_CFG;
+    property GPIO_DAT: TGROUP1_REG read FGPIO_DAT;
+    property GPIO_DRV: TGROUP2_REG read FGPIO_DRV;
+    property GPIO_PUL: TGROUP2_REG read FGPIO_PUL;
   end;
 
   TGPIO = class(TGPIOGROUP)
@@ -158,4 +158,3 @@ begin
 end;
 
 end.
-
