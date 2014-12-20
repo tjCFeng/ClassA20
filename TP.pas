@@ -60,6 +60,7 @@ type
 
   private
     FINTBit: Integer;
+    FEnBit: Integer;
     constructor Create;
     destructor Destroy; override;
   public
@@ -127,15 +128,16 @@ begin
 
   with TTP.Instance do
   begin
-    FTP_CTRL[0]^:= FTP_CTRL[0]^ and not (($3 shl 20) or ($FFFF shl 0));
-    FTP_CTRL[0]^:= FTP_CTRL[0]^ or (($1 shl 22) or ($0 shl 20) or ($F shl 16) or ($3F shl 0));
-    FTP_CTRL[1]^:= FTP_CTRL[1]^ or (($1 shl 7){ or ($1 shl 4)});
+    FTP_CTRL[0]^:= FTP_CTRL[0]^ and not (($1 shl 22) or ($3 shl 20) or ($FFFF shl 0));
+    FTP_CTRL[0]^:= FTP_CTRL[0]^ or (($0 shl 22) or ($1 shl 20) or ($7 shl 16) or ($3F shl 0));
+    FTP_CTRL[1]^:= FTP_CTRL[1]^ and not ($1 shl 3);
+    FTP_CTRL[1]^:= FTP_CTRL[1]^ or (($1 shl 7) or ($1 shl 4));
 
-    FTP_TPR^:= FTP_TPR^ and ($FFFF shl 0);
-    FTP_TPR^:= FTP_TPR^ or ($FFF shl 0);
+    FTP_TPR^:= $00000FFF;
   end;
 
   FINTBit:= ($1 shl 18);
+  FEnBit:= ($1 shl 16);
 end;
 
 destructor TTemperature.Destroy;
@@ -150,13 +152,13 @@ begin
     FTP_INT_FIFOS^:= FTP_INT_FIFOS^ or FINTBit;
 
     FTP_INT_FIFOC^:= FTP_INT_FIFOC^ or FINTBit;
-    FTP_TPR^:= FTP_TPR^ or ($1 shl 16);
+    FTP_TPR^:= FTP_TPR^ or FEnBit;
 
     while (FTP_INT_FIFOS^ and FINTBit) <> FINTBit do ;
     Result:= FTEMP_DATA^ * 85 / 4096;
 
     FTP_INT_FIFOC^:= FTP_INT_FIFOC^ and not FINTBit;
-    FTP_TPR^:= FTP_TPR^ and not ($1 shl 16);
+    FTP_TPR^:= FTP_TPR^ and not FEnBit;
   end;
 end;
 
@@ -165,3 +167,4 @@ finalization
   TTP.Instance.Release;
 
 end.
+
